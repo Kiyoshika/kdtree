@@ -27,7 +27,7 @@ void kdtree_build(
     Matrix** data,
     const size_t max_leaf_size);
 
-Vector* kdtree_find_k_nearest(
+Vector** kdtree_find_k_nearest(
     kdtree_t* kdtree,
     Vector* search_point,
     const size_t k,
