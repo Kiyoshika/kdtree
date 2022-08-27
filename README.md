@@ -10,10 +10,9 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * CPU MHz: 2686.254
 * RAM: 4GB
 
-* Test: 100,000 random points with 100 dimensions searching for K = 20 neighbors
-* Time: approx 10 seconds (using google stopwatch - clearly scientific methods here)
+**Test:** 100,000 random points with 100 dimensions searching for K = 20 neighbors
+** Time:** approx 10 seconds to build the tree and < 1 second to find neighbors.
 
-There may be opportunity to improve algorithm as it may be stepping into unnecessary branches...need to look further into it.
 
 # Building from Source
 This library depends my other library [CMatrix](https://github.com/Kiyoshika/CMatrix).
