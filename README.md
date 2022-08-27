@@ -10,10 +10,10 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * CPU MHz: 2686.254
 * RAM: 4GB
 
-* Test: 100,000 random points with 100 dimensions searching for K = 20 neighbors
-* Time: approx 10 seconds (using google stopwatch - clearly scientific methods here)
+**Test:** 100,000 random points with 100 dimensions searching for K = 20 neighbors.
 
-I imagine the speed is much better than 10 seconds if using a better processor compared to my budget laptop.
+**Time:** approx 10 seconds to build the tree and approx 2 seconds to find neighbors.
+
 
 # Building from Source
 This library depends my other library [CMatrix](https://github.com/Kiyoshika/CMatrix).
@@ -46,7 +46,7 @@ This uses a parameter `max_leaf_size` to control how much data (at most) should 
 
 Once inside a leaf node, we iterate over all data points inside and compare it against a list of K data points we consider "best" making any adjustments as necessary. Once we finish this leaf node, we close it off so we don't iterate it again. We then start traversing backwards up the tree comparing the perpendicular distance to the previous split point against our current worst point's distance; if this distance is smaller, we move over to that other branch to see if we're potentially missing any other points. This process is done until we traverse all the way back up to the root node.
 
-Each leaf node in the tree is visited at most once, so worst case scenario we iterate over the entire data set one time (which is still not bad even if we're searching 10 neighbors at once).
+Each leaf node in the tree is visited at most once, so worst case scenario we iterate over the entire data set one time.
 
 # Example
 See [this](src/driver.c) for a complete example.
