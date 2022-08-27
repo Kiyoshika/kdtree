@@ -10,8 +10,8 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * CPU MHz: 2686.254
 * RAM: 4GB
 
-Test: 100,000 random points with 100 dimensions searching for K = 20 neighbors
-Time: approx 10 seconds (using google stopwatch - clearly scientific methods here)
+* Test: 100,000 random points with 100 dimensions searching for K = 20 neighbors
+* Time: approx 10 seconds (using google stopwatch - clearly scientific methods here)
 
 I imagine the speed is much better than 10 seconds if using a better processor compared to my budget laptop.
 
