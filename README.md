@@ -11,7 +11,7 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * RAM: 4GB
 
 **Test:** 100,000 random points with 100 dimensions searching for K = 20 neighbors
-** Time:** approx 10 seconds to build the tree and < 1 second to find neighbors.
+** Time:** approx 10 seconds to build the tree and approx 2 seconds to find neighbors.
 
 
 # Building from Source
