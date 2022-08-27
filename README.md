@@ -3,6 +3,18 @@ This is a simple implementation of a (static) kdtree that I will be using in one
 
 For details on implementation, see [implementation details](#implementation-details)
 
+# Stress Test
+Before talking about performance, I'll list my specs for my shitty laptop:
+* Processor: Intel(R) Celeron(R) N4020 CPU @ 1.10GHz
+* Cores: 2 (even though this algo is single threaded)
+* CPU MHz: 2686.254
+* RAM: 4GB
+
+Test: 100,000 random points with 100 dimensions searching for K = 20 neighbors
+Time: approx 10 seconds (using google stopwatch - clearly scientific methods here)
+
+I imagine the speed is much better than 10 seconds if using a better processor compared to my budget laptop.
+
 # Building from Source
 This library depends my other library [CMatrix](https://github.com/Kiyoshika/CMatrix).
 
