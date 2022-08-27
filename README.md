@@ -35,7 +35,7 @@ This will generate a `libkdtree.a` static library that you can include in other 
     * `add_subdirectory(ext/kdtree)`
 * for your library/executable target, link the library and headers
     * `target_link_libraries([your target] kdtree)`
-    * `target_include_directories([your target] PUBLIC kdtree)`
+    * `target_include_directories([your target] PUBLIC ${kdtree_SOURCE_DIR}/include)`
 
 Now it should be apart of your build and you can use `#include "kdtree.h"`
 
