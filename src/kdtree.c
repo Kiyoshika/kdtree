@@ -1,4 +1,5 @@
 #include "kdtree.h"
+#include <stdio.h>
 
 static void err(const char* msg)
 {
@@ -107,7 +108,6 @@ void __kdtree_find_k_nearest(
     float (*distance)(const Vector*, const Vector*),
     struct best_points_t* best_points)
 {
-
     if (!kdtree)
         return;
     
@@ -118,6 +118,9 @@ void __kdtree_find_k_nearest(
     
     if (!kdtree->data)
         return;
+
+    //mat_print(kdtree->data);
+    //printf("\n\n");
 
     // search leaf node for nearest neighbors
     for (size_t i = 0; i < kdtree->data->n_rows; ++i)
@@ -134,7 +137,7 @@ void __kdtree_find_k_nearest(
                 best_points->index++;
         }
         else if (best_points->index < best_points->capacity - 1
-                || point_distance < best_points->distances[best_points->index - 1])
+                || point_distance < best_points->distances[best_points->index])
         {
             __insert_point_asc(best_points, point, point_distance);
         }
@@ -143,25 +146,28 @@ void __kdtree_find_k_nearest(
         
     }
 
-    kdtree->ignore = true; // prevent from traveling to this leaf node again
+    kdtree->ignore = true;
 
     while (kdtree->previous)
     {
         kdtree = kdtree->previous;
         bool traverse_left = false;
-        for (size_t i = 0; i < best_points->index; ++i)
+        for (size_t i = 0; i <= best_points->index; ++i)
         {
-            float perp_dist = kdtree->split_point - vec_at(best_points->addresses[i], kdtree->split_dimension);
-            traverse_left = false;
-            if (perp_dist < 0.0f)
-                traverse_left = true;
-            //perp_dist = -1.0f;
-            if (perp_dist * perp_dist < best_points->distances[best_points->index - 1])
+            if (best_points->addresses[i])
             {
-                if (traverse_left && kdtree->left && !kdtree->left->ignore)
-                    __kdtree_find_k_nearest(kdtree->left, search_point, distance, best_points);
-                if (kdtree->right && !kdtree->right->ignore)
-                    __kdtree_find_k_nearest(kdtree->right, search_point, distance, best_points);
+                float perp_dist = kdtree->split_point - vec_at(best_points->addresses[i], kdtree->split_dimension);
+                traverse_left = false;
+                if (perp_dist < 0.0f)
+                    traverse_left = true;
+                //perp_dist = -1.0f;
+                if (perp_dist * perp_dist < best_points->distances[best_points->index])
+                {
+                    if (traverse_left && kdtree->left && !kdtree->left->ignore)
+                        __kdtree_find_k_nearest(kdtree->left, search_point, distance, best_points);
+                    else if (kdtree->right && !kdtree->right->ignore)
+                        __kdtree_find_k_nearest(kdtree->right, search_point, distance, best_points);
+                }
             }
         }
     }
@@ -193,7 +199,7 @@ Vector** kdtree_find_k_nearest(
     for (size_t i = 0; i < k; ++i)
     {
         best_points->addresses[i] = NULL;
-        best_points->distances[i] = 999999.0f;
+        best_points->distances[i] = 99999999.0f;
     }
 
     __kdtree_find_k_nearest(kdtree, search_point, distance, best_points);

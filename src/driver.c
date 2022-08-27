@@ -49,13 +49,14 @@ int main()
     mat_print(data);
 
     kdtree_t* kdtree = kdtree_init();
-    kdtree_build(&kdtree, &data, 3);
+    size_t leaf_size = 1;  // limit each leaf to one data point (would create lots of branches)
+    kdtree_build(&kdtree, &data, leaf_size);
 
     Vector* search_point = NULL;
     vec_init(&search_point, 3);
-    vec_set(&search_point, 0, 2.0f);
-    vec_set(&search_point, 1, 3.5f);
-    vec_set(&search_point, 2, 1.2f);
+    vec_set(&search_point, 0, 1.8f);
+    vec_set(&search_point, 1, 1.5f);
+    vec_set(&search_point, 2, 3.0f);
 
     printf("\n\nSearch Point: (%.2f, %.2f, %.2f)\n", 
         vec_at(search_point, 0), 
