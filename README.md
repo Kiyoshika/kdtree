@@ -1,6 +1,8 @@
 # kdtree
 This is a simple implementation of a (static) kdtree that I will be using in one of my other projects. It does not support inserting/removing as I don't personally need that functionality (but feel free to contribute).
 
+This is a non-canonical implementation of a kdtree. Typically people insert a point on each node, but I rather insert a subset of data into the leaf nodes (and store no data in the traversal nodes).
+
 For details on implementation, see [implementation details](#implementation-details)
 
 # Stress Test
@@ -10,10 +12,25 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * CPU MHz: 2686.254
 * RAM: 4GB
 
-**Test:** 100,000 random points with 100 dimensions searching for K = 20 neighbors.
+Compiler Options:
+* Compiler: gcc
+* Optimization: -O2
 
-**Time:** approx 10 seconds to build the tree and approx 2 seconds to find neighbors.
+kdtree Parameters:
+* Neighbors: K = 10
+* Leaf Size: 2 * K (20)
 
+**Test:** 100,000 random points with 100 dimensions searching for K = 10 neighbors.
+
+**Results:** (measured with `clock_t`)
+* Tree build time: 8792ms (8.8s)
+* Searching 10 Neighbors for 1 Random Point: under 0 ms (under 0s)
+* Searching 10 Neighbors for 10 Random Points: 2ms (0.002s)
+* Searching 10 neighbors for 100 random points: 13 ms (0.013s)
+* Searching 10 neighbors for 1000 random points: 124ms (0.124s)
+
+# Warnings
+For some small leaf sizes (under 10), I have seen some instances of not 100% obtaining the nearest neighbors (1-2 points could be slightly off). For small- to mid-sized data sets you can use `2 * K` and for larger data sets maybe bump it to 25-100+. This needs some more research/testing.
 
 # Building from Source
 This library depends my other library [CMatrix](https://github.com/Kiyoshika/CMatrix).

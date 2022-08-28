@@ -108,6 +108,8 @@ void __kdtree_find_k_nearest(
     float (*distance)(const Vector*, const Vector*),
     struct best_points_t* best_points)
 {
+    static bool unwinding = false;
+
     if (!kdtree)
         return;
     
@@ -148,26 +150,35 @@ void __kdtree_find_k_nearest(
 
     kdtree->ignore = true;
 
-    while (kdtree->previous)
+    if (!unwinding)
     {
-        kdtree = kdtree->previous;
-        bool traverse_left = false;
-        for (size_t i = 0; i <= best_points->index; ++i)
+        while (kdtree->previous)
         {
-            if (best_points->addresses[i])
+            unwinding = true;
+            kdtree = kdtree->previous;
+            bool traverse_left = false;
+            float perp_dist = kdtree->split_point - vec_at(search_point, kdtree->split_dimension);
+            if (perp_dist < 0.0f)
+                traverse_left = true;
+            
+            size_t idx = best_points->index;
+            if (best_points->index < best_points->capacity - 1)
+                idx--;
+
+            float worst_distance = distance(search_point, best_points->addresses[idx]);
+            
+            if (perp_dist * perp_dist < worst_distance)
             {
-                float perp_dist = kdtree->split_point - vec_at(best_points->addresses[i], kdtree->split_dimension);
-                traverse_left = false;
-                if (perp_dist < 0.0f)
-                    traverse_left = true;
-                //perp_dist = -1.0f;
-                if (perp_dist * perp_dist < best_points->distances[best_points->index])
-                {
-                    if (traverse_left && kdtree->left && !kdtree->left->ignore)
-                        __kdtree_find_k_nearest(kdtree->left, search_point, distance, best_points);
-                    else if (kdtree->right && !kdtree->right->ignore)
-                        __kdtree_find_k_nearest(kdtree->right, search_point, distance, best_points);
-                }
+                if (traverse_left && kdtree->left && !kdtree->left->ignore)
+                    __kdtree_find_k_nearest(kdtree->left, search_point, distance, best_points);
+                else if (kdtree->right && !kdtree->right->ignore)
+                    __kdtree_find_k_nearest(kdtree->right, search_point, distance, best_points);
+            }
+            else
+            {
+                kdtree->left->ignore = true;
+                kdtree->right->ignore = true;
+                kdtree->ignore = true;
             }
         }
     }
