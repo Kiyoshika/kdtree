@@ -1,6 +1,8 @@
 # kdtree
 This is a simple implementation of a (static) kdtree that I will be using in one of my other projects. It does not support inserting/removing as I don't personally need that functionality (but feel free to contribute).
 
+This is a non-canonical implementation of a kdtree. Typically people insert a point on each node, but I rather insert a subset of data into the leaf nodes (and store no data in the traversal nodes).
+
 For details on implementation, see [implementation details](#implementation-details)
 
 # Stress Test
@@ -10,27 +12,25 @@ Before talking about performance, I'll list my specs for my shitty laptop:
 * CPU MHz: 2686.254
 * RAM: 4GB
 
-Other notes:
+Compiler Options:
 * Compiler: gcc
 * Optimization: -O2
-* Leaf Size: 100 (parameter in kdtree)
-* The search point is randomly sampled from the original matrix each iteration
 
-**Test:** 100,000 random points with 100 dimensions searching for K = 20 neighbors.
+kdtree Parameters:
+* Neighbors: K = 10
+* Leaf Size: 2 * K (20)
+
+**Test:** 100,000 random points with 100 dimensions searching for K = 10 neighbors.
 
 **Results:** (measured with `clock_t`)
-* Building tree: 7811ms (7.8s)
-* Finding 20 neighbors for 1 random point: 159ms (0.16s)
-* Finding 20 neighbors for 10 random points: 1480ms (1.48s)
-* Finding 20 neighbors for 100 random points: 15635ms (15.6s)
-* Finding 20 neighbors for 1000 random points: 156542ms (2m36s)
+* Tree build time: 8792ms (8.8s)
+* Searching 10 Neighbors for 1 Random Point: under 0 ms (under 0s)
+* Searching 10 Neighbors for 10 Random Points: 2ms (0.002s)
+* Searching 10 neighbors for 100 random points: 13 ms (0.013s)
+* Searching 10 neighbors for 1000 random points: 124ms (0.124s)
 
-From this testing it appears searching a point scales linearly at around 150ms each (for a 100000 x 100 matrix).
-
-I don't have it listed here but playing around with the leaf sizes seem to only have a minor impact (changing the 100 benchmark by maybe 1-2 seconds).
-
-This seems to barely be better than the naive implementation so I feel there is definitely room for improvement...
-
+# Warnings
+For some small leaf sizes (under 10), I have seen some instances of not 100% obtaining the nearest neighbors (1-2 points could be slightly off). For small- to mid-sized data sets you can use `2 * K` and for larger data sets maybe bump it to 25-100+. This needs some more research/testing.
 
 # Building from Source
 This library depends my other library [CMatrix](https://github.com/Kiyoshika/CMatrix).

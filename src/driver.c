@@ -15,11 +15,11 @@ int main()
 {
 
     Matrix* data = NULL;
-    mat_init(&data, 27, 3);
-    //mat_random(&data, 0.0f, 100.0f);
+    mat_init(&data, 100, 3);
+    mat_random(&data, 0.0f, 10.0f);
     
     // static dataset I used for manual validation (validated up to K = 27, i.e., the entire set)
-    mat_set(&data, 0, 0, 2.36149); 	    mat_set(&data, 0, 1, 2.783264); 	mat_set(&data, 0, 2, 0.775234); 
+    /*mat_set(&data, 0, 0, 2.36149); 	    mat_set(&data, 0, 1, 2.783264); 	mat_set(&data, 0, 2, 0.775234); 
     mat_set(&data, 1, 0, 0.828394); 	mat_set(&data, 1, 1, 3.814772); 	mat_set(&data, 1, 2, 0.565167); 
     mat_set(&data, 2, 0, 1.89549); 	    mat_set(&data, 2, 1, 1.595959); 	mat_set(&data, 2, 2, 4.730657); 
     mat_set(&data, 3, 0, 4.205801); 	mat_set(&data, 3, 1, 2.341894); 	mat_set(&data, 3, 2, 0.597335); 
@@ -45,27 +45,24 @@ int main()
     mat_set(&data, 23, 0, 0.489405); 	mat_set(&data, 23, 1, 0.92893); 	mat_set(&data, 23, 2, 2.163359); 
     mat_set(&data, 24, 0, 4.440102); 	mat_set(&data, 24, 1, 0.992767); 	mat_set(&data, 24, 2, 4.769408); 
     mat_set(&data, 25, 0, 0.409812); 	mat_set(&data, 25, 1, 2.589319); 	mat_set(&data, 25, 2, 2.488766); 
-    mat_set(&data, 26, 0, 2.862457); 	mat_set(&data, 26, 1, 4.486223); 	mat_set(&data, 26, 2, 3.788948);
+    mat_set(&data, 26, 0, 2.862457); 	mat_set(&data, 26, 1, 4.486223); 	mat_set(&data, 26, 2, 3.788948);*/
+    
     mat_print(data);
 
     kdtree_t* kdtree = kdtree_init();
-    size_t leaf_size = 1;  // limit each leaf to one data point (would create lots of branches)
+    size_t k = 10;
+    size_t leaf_size = 2 * k;
+
     kdtree_build(&kdtree, &data, leaf_size);
 
     Vector* search_point = NULL;
     vec_init(&search_point, 3);
-    vec_set(&search_point, 0, 1.8f);
-    vec_set(&search_point, 1, 1.5f);
-    vec_set(&search_point, 2, 3.0f);
+    vec_set(&search_point, 0, 3.8f);
+    vec_set(&search_point, 1, 2.5f);
+    vec_set(&search_point, 2, 1.0f);
 
-    printf("\n\nSearch Point: (%.2f, %.2f, %.2f)\n", 
-        vec_at(search_point, 0), 
-        vec_at(search_point, 1),
-        vec_at(search_point, 2));
-
-    size_t k = 5;
     Vector** find = kdtree_find_k_nearest(kdtree, search_point, k, &squared_distance);
-
+    
     printf("\nFound Points:\n");
     for (size_t i = 0; i < k; ++i)
     {
