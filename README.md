@@ -23,13 +23,13 @@ Other notes:
 * Finding 20 neighbors for 1 random point: 159ms (0.16s)
 * Finding 20 neighbors for 10 random points: 1480ms (1.48s)
 * Finding 20 neighbors for 100 random points: 15635ms (15.6s)
-* Finding 20 neighbors for 1000 random points: 156542ms (1m36s)
+* Finding 20 neighbors for 1000 random points: 156542ms (2m36s)
 
 From this testing it appears searching a point scales linearly at around 150ms each (for a 100000 x 100 matrix).
 
 I don't have it listed here but playing around with the leaf sizes seem to only have a minor impact (changing the 100 benchmark by maybe 1-2 seconds).
 
-Since we do a lot of distance computations you could possibly squeeze performance with vectorization but at the moment I don't think it's worth it.
+This seems to barely be better than the naive implementation so I feel there is definitely room for improvement...
 
 
 # Building from Source
