@@ -48,6 +48,8 @@ This will generate a `libkdtree.a` static library that you can include in other 
 * (optional) create a directory to store dependency, e.g., `ext/`
 * add the library as a submodule
     * `git submodule add https://github.com/Kiyoshika/kdtree.git`
+* fetch dependnecies for submodule
+   * `git submodule update --init --recursive`
 * in your root CMakeLists.txt, add the directory
     * `add_subdirectory(ext/kdtree)`
 * for your library/executable target, link the library and headers
